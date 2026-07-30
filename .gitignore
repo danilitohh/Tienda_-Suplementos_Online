@@ -1,0 +1,4 @@
+tmp/
+verify-browser.cjs
+.DS_Store
+Thumbs.db
