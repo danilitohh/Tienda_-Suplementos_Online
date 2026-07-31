@@ -812,17 +812,6 @@ function App() {
       </main>
 
       <footer className="footer">
-        <div className="footer-newsletter-strip">
-          <div className="footer-newsletter-strip__copy">
-            <div className="newsletter-title">Recibe ofertas y novedades en tu correo</div>
-            <p className="subtitle">Promociones, nuevos lanzamientos y combos destacados para convertir más.</p>
-          </div>
-          <form className="footer-newsletter-strip__form" onSubmit=${(event) => event.preventDefault()}>
-            <input className="subscribe-email" type="email" placeholder="Tu correo electrónico" />
-            <button type="submit" className="subscribe-button">Suscribirme</button>
-          </form>
-        </div>
-
         <div className="footer-trust-strip">
           ${featureCards.map(
             (item) => html`
