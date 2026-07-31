@@ -54,7 +54,7 @@ export function makePackArt({
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
-export const siteName = "FuelLab Colombia";
+export const siteName = "Suplementos Colombia";
 export const supportPhone = "+57 300 555 0198";
 export const whatsappNumber = "573005550198";
 
@@ -64,7 +64,6 @@ export const navItems = [
   "Marcas",
   "Combos",
   "Ofertas",
-  "Blog",
 ];
 
 export const categories = [
@@ -90,96 +89,94 @@ export const brandNames = [
   "MuscleTech",
   "BSN",
   "Cellucor",
-  "SASCHA",
-  "Proscience",
-  "Basic",
-  "Nutramerican",
+  "Natures Best",
   "Ronnie Coleman",
+  "Combos",
 ];
 
 export const heroSlides = [
   {
     eyebrow: "Envío gratis a toda Colombia",
-    title: "Suplementos para rendir más, sin perder tiempo.",
+    title: "Proteínas y creatinas listas para vender.",
     description:
-      "Catálogo curado para fuerza, volumen y definición con filtros rápidos, carrito persistente y checkout listo para conectar a tu operación real.",
-    cta: "Ver productos",
+      "Una vitrina limpia, rápida y editable para cambiar productos, precios y promos sin tocar la base del sitio.",
+    cta: "Ver catálogo",
     secondary: "Hablar por WhatsApp",
-    metric: "Más de 18 referencias",
-    accent: "#63e6a6",
-    accent2: "#10302a",
-    tag: "Destacados",
+    metric: "Top ventas",
+    accent: "#e43131",
+    accent2: "#181818",
+    tag: "Proteínas",
   },
   {
-    eyebrow: "Combos listos para volumen",
-    title: "Arma tu stack con proteínas, creatina y recuperación.",
+    eyebrow: "Combos de la semana",
+    title: "Stacks armados para volumen y definición.",
     description:
-      "Tablero visual inspirado en tiendas reales: combos, marcas, recomendados y una experiencia móvil que se siente viva y comprensible.",
+      "Combos, marcas y promos organizados con una estructura muy parecida a la tienda de referencia.",
     cta: "Explorar combos",
     secondary: "Ver marcas",
-    metric: "Ahorra en packs",
-    accent: "#ffd166",
-    accent2: "#2a1d0d",
+    metric: "Ahorra más",
+    accent: "#181818",
+    accent2: "#f7f7f7",
     tag: "Combos",
   },
   {
-    eyebrow: "Compra segura y soporte humano",
-    title: "Una tienda completa para vender, escalar y probar campañas.",
+    eyebrow: "Marcas premium",
+    title: "Una tienda pensada para convertir.",
     description:
-      "Puedes cambiar productos, precios, textos, métodos de pago y flujo de checkout sin tocar la estructura base del sitio.",
-    cta: "Ir al checkout",
+      "Edita productos, precios y contenidos sin tocar la estructura base. El carrito y el checkout ya quedan listos.",
+    cta: "Ir a ofertas",
     secondary: "Ver carrito",
-    metric: "Listo para adaptar",
-    accent: "#66b3ff",
-    accent2: "#0c2238",
-    tag: "Checkout",
+    metric: "Editable",
+    accent: "#e43131",
+    accent2: "#f7f7f7",
+    tag: "Ofertas",
   },
 ];
 
 export const featureCards = [
   {
-    title: "Proteínas premium",
-    text: "Productos de recuperación y volumen con presentación clara, precios visibles y CTA directo.",
+    title: "Envío gratis",
+    text: "Promesa visible en la franja superior, como en la tienda de referencia.",
   },
   {
-    title: "Cupón y promociones",
-    text: "Aplica códigos en el carrito, calcula el descuento y muestra el total actualizado al instante.",
+    title: "Compra segura",
+    text: "Carrito persistente, totales claros y cierre rápido por WhatsApp.",
   },
   {
-    title: "Checkout funcional",
-    text: "Formulario interactivo con resumen de pedido, método de entrega y confirmación final.",
+    title: "100% originales",
+    text: "Bloques de confianza, marcas visibles y navegación limpia.",
   },
   {
     title: "Pensado para móvil",
-    text: "Layout responsive con drawer, navegación compacta y catálogo legible en pantallas pequeñas.",
+    text: "Tarjetas apiladas y drawer lateral para una experiencia fluida.",
   },
 ];
 
 const art = {
-  wheyGold: makePackArt({ title: "Whey Gold", accent: "#ffd166", accent2: "#2a1d0d", label: "PROTEIN" }),
-  isolatePro: makePackArt({ title: "Isolate Pro", accent: "#66b3ff", accent2: "#0c2238", label: "LEAN" }),
-  creatine: makePackArt({ title: "Creatine", accent: "#63e6a6", accent2: "#10302a", label: "STRENGTH" }),
-  nitroRush: makePackArt({ title: "Nitro Rush", accent: "#ff8a80", accent2: "#301119", label: "PRE" }),
-  seriousMass: makePackArt({ title: "Serious Mass", accent: "#c8a6ff", accent2: "#241436", label: "MASS" }),
-  eaa: makePackArt({ title: "EAA Flux", accent: "#8fd2ff", accent2: "#0f2238", label: "RECOVERY" }),
-  multivit: makePackArt({ title: "Multivit", accent: "#f6d36b", accent2: "#2b220a", label: "VITAMIN" }),
-  glutamine: makePackArt({ title: "Glutamine", accent: "#8dffbb", accent2: "#10201a", label: "RECOVER" }),
-  shred: makePackArt({ title: "Shred Max", accent: "#ff8d8d", accent2: "#321012", label: "CUT" }),
-  snackBar: makePackArt({ title: "Snack Box", accent: "#d6b8ff", accent2: "#2a193d", label: "SNACK" }),
-  hydrate: makePackArt({ title: "Hydrate", accent: "#72e0d3", accent2: "#09302d", label: "HYDRATE" }),
-  giftPack: makePackArt({ title: "Gift Pack", accent: "#ffffff", accent2: "#223042", label: "BONUS" }),
-  comboVol: makePackArt({ title: "Combo Vol", accent: "#63e6a6", accent2: "#10302a", label: "VALUE" }),
-  comboForce: makePackArt({ title: "Combo Force", accent: "#ffd166", accent2: "#2a1d0d", label: "VALUE" }),
-  comboCut: makePackArt({ title: "Combo Cut", accent: "#66b3ff", accent2: "#0c2238", label: "VALUE" }),
-  wheyBasic: makePackArt({ title: "Whey Basic", accent: "#9ed4ff", accent2: "#0d2339", label: "BASIC" }),
-  creatine500: makePackArt({ title: "Creatine 500", accent: "#63e6a6", accent2: "#10302a", label: "500G" }),
-  aminoShot: makePackArt({ title: "Amino X", accent: "#f78fb3", accent2: "#32101e", label: "AMINO" }),
+  wheyGold: makePackArt({ title: "Whey Gold", accent: "#e43131", accent2: "#181818", label: "PROTEIN" }),
+  isolatePro: makePackArt({ title: "Isolate Pro", accent: "#181818", accent2: "#f7f7f7", label: "LEAN" }),
+  creatine: makePackArt({ title: "Creatine", accent: "#e43131", accent2: "#f7f7f7", label: "STRENGTH" }),
+  nitroRush: makePackArt({ title: "Nitro Rush", accent: "#181818", accent2: "#e9e9e9", label: "PRE" }),
+  seriousMass: makePackArt({ title: "Serious Mass", accent: "#e43131", accent2: "#181818", label: "MASS" }),
+  eaa: makePackArt({ title: "EAA Flux", accent: "#181818", accent2: "#f7f7f7", label: "RECOVERY" }),
+  multivit: makePackArt({ title: "Multivit", accent: "#e43131", accent2: "#f7f7f7", label: "VITAMIN" }),
+  glutamine: makePackArt({ title: "Glutamine", accent: "#181818", accent2: "#f7f7f7", label: "RECOVER" }),
+  shred: makePackArt({ title: "Shred Max", accent: "#e43131", accent2: "#181818", label: "CUT" }),
+  snackBar: makePackArt({ title: "Snack Box", accent: "#181818", accent2: "#f7f7f7", label: "SNACK" }),
+  hydrate: makePackArt({ title: "Hydrate", accent: "#e43131", accent2: "#f7f7f7", label: "HYDRATE" }),
+  giftPack: makePackArt({ title: "Gift Pack", accent: "#181818", accent2: "#f7f7f7", label: "BONUS" }),
+  comboVol: makePackArt({ title: "Combo Vol", accent: "#e43131", accent2: "#181818", label: "VALUE" }),
+  comboForce: makePackArt({ title: "Combo Force", accent: "#181818", accent2: "#f7f7f7", label: "VALUE" }),
+  comboCut: makePackArt({ title: "Combo Cut", accent: "#e43131", accent2: "#f7f7f7", label: "VALUE" }),
+  wheyBasic: makePackArt({ title: "Whey Basic", accent: "#181818", accent2: "#f7f7f7", label: "BASIC" }),
+  creatine500: makePackArt({ title: "Creatine 500", accent: "#e43131", accent2: "#181818", label: "500G" }),
+  aminoShot: makePackArt({ title: "Amino X", accent: "#181818", accent2: "#f7f7f7", label: "AMINO" }),
 };
 
 export const products = [
   {
     id: "whey-gold-standard",
-    name: "Whey Gold 5 lb",
+    name: "Whey Gold Standard 5 lb",
     brand: "Optimum Nutrition",
     category: "Proteínas",
     tags: ["Proteínas", "Oferta Semanal", "Destacados"],
@@ -218,7 +215,7 @@ export const products = [
   {
     id: "whey-basic",
     name: "Whey Basic 4 lb",
-    brand: "Basic",
+    brand: "Natures Best",
     category: "Proteínas",
     tags: ["Proteínas", "Oferta Semanal"],
     collection: "Destacados",
@@ -237,7 +234,7 @@ export const products = [
   {
     id: "creatine-platinum",
     name: "Creatine Platinum 300 g",
-    brand: "Iron Lab",
+    brand: "MuscleTech",
     category: "Creatinas",
     tags: ["Creatinas", "Destacados"],
     collection: "Destacados",
@@ -256,7 +253,7 @@ export const products = [
   {
     id: "creatine-basic",
     name: "Creatina 500 g",
-    brand: "Nutramerican",
+    brand: "Ronnie Coleman",
     category: "Creatinas",
     tags: ["Creatinas", "Oferta Semanal"],
     collection: "Destacados",
@@ -294,7 +291,7 @@ export const products = [
   {
     id: "serious-mass",
     name: "Serious Mass XXL",
-    brand: "Mutant",
+    brand: "Optimum Nutrition",
     category: "Ganadores de Masa",
     tags: ["Ganadores de Masa", "Destacados"],
     collection: "Destacados",
@@ -313,7 +310,7 @@ export const products = [
   {
     id: "eaa-flux",
     name: "EAA Flux",
-    brand: "Proscience",
+    brand: "BSN",
     category: "Aminoácidos",
     tags: ["Aminoácidos", "Destacados"],
     collection: "Destacados",
@@ -332,7 +329,7 @@ export const products = [
   {
     id: "multivit-men",
     name: "Multivit Men",
-    brand: "NOW",
+    brand: "Natures Best",
     category: "Vitaminas",
     tags: ["Vitaminas", "Destacados"],
     collection: "Destacados",
@@ -389,7 +386,7 @@ export const products = [
   {
     id: "protein-bar-box",
     name: "Protein Bar Box",
-    brand: "Simply",
+    brand: "Natures Best",
     category: "Snacks",
     tags: ["Snacks", "Obsequios"],
     collection: "Destacados",
@@ -408,7 +405,7 @@ export const products = [
   {
     id: "electro-hydrate",
     name: "Electro Hydrate",
-    brand: "SASCHA",
+    brand: "Ronnie Coleman",
     category: "Hidratación",
     tags: ["Hidratación", "Destacados"],
     collection: "Destacados",
@@ -427,7 +424,7 @@ export const products = [
   {
     id: "gift-pack",
     name: "Gift Pack Shaker",
-    brand: "FuelLab",
+    brand: "Combos",
     category: "Obsequios",
     tags: ["Obsequios"],
     collection: "Destacados",
@@ -446,7 +443,7 @@ export const products = [
   {
     id: "combo-volumen",
     name: "Combo Ahorro Volumen",
-    brand: "FuelLab",
+    brand: "Combos",
     category: "Combos",
     tags: ["Combos", "Proteínas", "Creatinas", "Oferta Semanal"],
     collection: "Combos",
@@ -465,7 +462,7 @@ export const products = [
   {
     id: "combo-fuerza",
     name: "Combo Fuerza Total",
-    brand: "FuelLab",
+    brand: "Combos",
     category: "Combos",
     tags: ["Combos", "Creatinas", "Pre-Entrenos"],
     collection: "Combos",
@@ -484,7 +481,7 @@ export const products = [
   {
     id: "combo-corte",
     name: "Combo Corte Limpio",
-    brand: "FuelLab",
+    brand: "Combos",
     category: "Combos",
     tags: ["Combos", "Quemadores", "Proteínas", "Oferta Semanal"],
     collection: "Combos",
@@ -529,60 +526,54 @@ export const recommendationIds = [
   "whey-basic",
 ];
 
-export const blogEntries = [
-  {
-    title: "Cómo elegir tu proteína según tu objetivo",
-    text:
-      "Busca una proteína alta en calidad, revisa la porción y ajusta el momento de uso a tu rutina diaria.",
-  },
-  {
-    title: "Creatina: cuándo tomarla y cuánto usar",
-    text:
-      "La constancia importa más que el horario. Define una dosis clara y acompáñala con agua suficiente.",
-  },
-  {
-    title: "Combos que funcionan para volumen limpio",
-    text:
-      "Combina proteína, creatina y un gainer solo cuando tus calorías totales realmente lo necesitan.",
-  },
-];
-
 export const brandCards = [
   {
     name: "Optimum Nutrition",
     initials: "ON",
-    text: "Proteínas y whey pensadas para compras recurrentes y una marca reconocida.",
-    accent: "#ffd166",
+    text: "Proteínas y whey para una vitrina reconocible.",
+    accent: "#e43131",
   },
   {
     name: "Dymatize",
     initials: "DY",
-    text: "Aislados y proteínas con identidad premium para catálogos que venden confianza.",
-    accent: "#66b3ff",
+    text: "Aislados y proteínas con presencia premium.",
+    accent: "#181818",
   },
   {
     name: "MuscleTech",
     initials: "MT",
-    text: "Pre-entrenos y apoyo de rendimiento con una estética fuerte y deportiva.",
-    accent: "#ff8a80",
+    text: "Pre-entrenos y rendimiento con una estética fuerte.",
+    accent: "#e43131",
   },
   {
     name: "BSN",
     initials: "BS",
-    text: "Recuperación, aminoácidos y productos versátiles para rutina diaria.",
-    accent: "#8dffbb",
+    text: "Recuperación, aminoácidos y productos versátiles.",
+    accent: "#181818",
   },
   {
     name: "Cellucor",
     initials: "CC",
-    text: "Energía, enfoque y fórmulas de activación con mucha presencia visual.",
-    accent: "#c8a6ff",
+    text: "Energía, enfoque y fórmulas de activación.",
+    accent: "#e43131",
   },
   {
-    name: "FuelLab",
-    initials: "FL",
-    text: "Combos, obsequios y packs diseñados para el checkout de esta tienda demo.",
-    accent: "#63e6a6",
+    name: "Natures Best",
+    initials: "NB",
+    text: "Proteína, vitaminas y suplementos diarios.",
+    accent: "#181818",
+  },
+  {
+    name: "Ronnie Coleman",
+    initials: "RC",
+    text: "Una línea robusta para alto rendimiento.",
+    accent: "#e43131",
+  },
+  {
+    name: "Combos",
+    initials: "CO",
+    text: "Combos, obsequios y packs para vender más rápido.",
+    accent: "#181818",
   },
 ];
 
@@ -591,21 +582,3 @@ export const coupons = {
   RUTA15: { type: "percent", value: 15, minSubtotal: 150000, label: "15% en compras desde $150.000" },
   MUSCLE20: { type: "percent", value: 20, minSubtotal: 250000, label: "20% en compras grandes" },
 };
-
-export const faqs = [
-  {
-    question: "¿Este sitio ya vende en serio?",
-    answer:
-      "La base está lista para catálogo, carrito y checkout. Solo tienes que conectar pasarela de pago, inventario y backend real.",
-  },
-  {
-    question: "¿Puedo cambiar productos y precios?",
-    answer:
-      "Sí. Todo el catálogo vive en un archivo de datos separado para que puedas editarlo sin tocar la lógica principal.",
-  },
-  {
-    question: "¿Sirve en celular?",
-    answer:
-      "Sí. El diseño cambia a una navegación compacta, tarjetas apiladas y drawer de carrito para no perder fluidez.",
-  },
-];

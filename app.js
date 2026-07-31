@@ -1,10 +1,8 @@
 import {
   brandCards,
   brandNames,
-  blogEntries,
   categories,
   coupons,
-  faqs,
   featureCards,
   heroSlides,
   money,
@@ -84,6 +82,7 @@ function App() {
   const [heroIndex, setHeroIndex] = useState(0);
   const [cart, setCart] = useState(() => readStoredCart());
   const [cartOpen, setCartOpen] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [quickViewId, setQuickViewId] = useState(null);
   const [selectedVariant, setSelectedVariant] = useState("");
@@ -118,7 +117,7 @@ function App() {
 
   useEffect(() => {
     const body = document.body;
-    if (cartOpen || quickViewProduct || mobileMenuOpen) {
+    if (cartOpen || quickViewProduct || mobileMenuOpen || checkoutOpen) {
       body.style.overflow = "hidden";
     } else {
       body.style.overflow = "";
@@ -126,7 +125,7 @@ function App() {
     return () => {
       body.style.overflow = "";
     };
-  }, [cartOpen, quickViewProduct, mobileMenuOpen]);
+  }, [cartOpen, checkoutOpen, quickViewProduct, mobileMenuOpen]);
 
   useEffect(() => {
     const onKeyDown = (event) => {
@@ -134,6 +133,7 @@ function App() {
         setCartOpen(false);
         setQuickViewId(null);
         setMobileMenuOpen(false);
+        setCheckoutOpen(false);
       }
     };
     window.addEventListener("keydown", onKeyDown);
@@ -177,6 +177,31 @@ function App() {
 
   const recommendationCards = useMemo(
     () => recommendationIds.map((id) => products.find((item) => item.id === id)).filter(Boolean),
+    [],
+  );
+
+  const promoBanners = useMemo(
+    () => [
+      {
+        title: "Combos de la semana",
+        text: "Ahorra en stacks listos para vender y destacar desde la portada.",
+        image: products.find((item) => item.id === "combo-volumen")?.image || products[0].image,
+        button: "Ver combos",
+        action: () => {
+          setCollection("Combos");
+          scrollToId("catalogo");
+        },
+        tint: "#e43131",
+      },
+      {
+        title: "Marcas premium",
+        text: "Optimum Nutrition, Dymatize, Cellucor y más en una sola vitrina.",
+        image: products.find((item) => item.id === "whey-gold-standard")?.image || products[1].image,
+        button: "Ver marcas",
+        action: () => scrollToId("marcas"),
+        tint: "#181818",
+      },
+    ],
     [],
   );
 
@@ -362,7 +387,6 @@ function App() {
     setCouponInput("");
     setAppliedCoupon(null);
     setToast(`Pedido ${orderNumber} listo.`);
-    scrollToId("checkout");
   };
 
   const currentSlide = heroSlides[heroIndex];
@@ -377,7 +401,12 @@ function App() {
       <header className="topbar">
         <div className="topbar__inner">
           <a className="brand" href="#inicio" onClick=${() => setMobileMenuOpen(false)}>
-            <div className="brand__mark">${siteName.slice(0, 2)}</div>
+            <div className="brand__mark">${siteName
+              .split(" ")
+              .map((part) => part[0])
+              .join("")
+              .slice(0, 2)
+              .toUpperCase()}</div>
             <div className="brand__copy">
               <div className="brand__name">${siteName}</div>
               <div className="brand__tag">Tienda online de suplementos deportivos</div>
@@ -418,7 +447,6 @@ function App() {
                       setCollection("Todos");
                       scrollToId("catalogo");
                     }
-                    if (item === "Blog") scrollToId("blog");
                   }}
                 >
                   ${item}
@@ -489,7 +517,6 @@ function App() {
                     />
                   </div>
                   <div className="hero-card__body">
-                    <h2>${slide.title}</h2>
                     <p>${slide.description}</p>
                     <div className="hero-card__foot">
                       <span className="pill">${slide.metric}</span>
@@ -535,26 +562,54 @@ function App() {
           </div>
         </section>
 
-        <section className="feature-strip">
-          ${featureCards.map(
-            (item) => html`
-              <article className="feature-card" key=${item.title}>
-                <div className="eyebrow" style=${{ marginBottom: "12px" }}>FuelLab</div>
-                <strong>${item.title}</strong>
-                <p>${item.text}</p>
-              </article>
-            `,
-          )}
+        <section className="section section--categories">
+          <div className="section__head">
+            <div>
+              <div className="eyebrow">Colecciones</div>
+              <h2 className="section-title">Compra por categoría</h2>
+            </div>
+            <div className="section__meta">
+              Navegación rápida para que el usuario entre directo a proteínas, creatinas, combos y más.
+            </div>
+          </div>
+
+          <div className="category-strip">
+            ${categories
+              .filter((item) => item !== "Todos")
+              .map(
+                (item) => html`
+                  <button
+                    key=${item}
+                    type="button"
+                    className="category-circle"
+                    onClick=${() => {
+                      setCategory(item);
+                      scrollToId("catalogo");
+                    }}
+                  >
+                    <span className="category-circle__icon">
+                      ${item
+                        .split(" ")
+                        .map((part) => part[0])
+                        .join("")
+                        .slice(0, 2)
+                        .toUpperCase()}
+                    </span>
+                    <span className="category-circle__text">${item}</span>
+                  </button>
+                `,
+              )}
+          </div>
         </section>
 
         <section id="catalogo" className="section">
           <div className="section__head">
             <div>
               <div className="eyebrow">Productos</div>
-              <h2 className="section-title">Catálogo y carrito</h2>
+              <h2 className="section-title">Productos destacados</h2>
             </div>
             <div className="section__meta">
-              Filtra por categoría, marca o texto. El carrito se guarda localmente para que puedas seguir editando.
+              Filtra por categoría, marca o búsqueda rápida. El carrito se guarda localmente para que puedas seguir editando.
             </div>
           </div>
 
@@ -681,11 +736,11 @@ function App() {
               </div>
 
               <div id="marcas" className="section" style=${{ marginTop: "6px" }}>
-                <div className="section__head">
-                  <div>
-                    <div className="eyebrow">Marcas</div>
-                    <h2 className="section-title">Marcas en suplementación deportiva</h2>
-                  </div>
+              <div className="section__head">
+                <div>
+                  <div className="eyebrow">Marcas</div>
+                  <h2 className="section-title">Marcas destacadas</h2>
+                </div>
                   <div className="section__meta">Haz clic en una marca para filtrar al instante el catálogo.</div>
                 </div>
 
@@ -716,377 +771,88 @@ function App() {
                 </div>
               </div>
 
-              <div className="section">
+              <div className="section section--banners">
                 <div className="section__head">
                   <div>
-                    <div className="eyebrow">Recomendaciones</div>
-                    <h2 className="section-title">Productos populares</h2>
+                    <div className="eyebrow">Colección</div>
+                    <h2 className="section-title">Promociones</h2>
                   </div>
-                  <div className="section__meta">Seleccionados para vender rápido y dar claridad visual en la home.</div>
+                  <div className="section__meta">Espacio listo para ofertas, combos destacados y campañas de temporada.</div>
                 </div>
 
-                <div className="reco-grid">
-                  ${recommendationCards.map(
-                    (product) => html`
-                      <article className="reco-card" key=${product.id}>
-                        <img src=${product.image} alt=${product.name} />
-                        <strong>${product.name}</strong>
-                        <span>${product.brand}</span>
-                        <span>${money(product.price)}</span>
-                        <button type="button" className="secondary-button" onClick=${() => addToCart(product, product.variants?.[0] || "")}>
-                          Añadir
-                        </button>
+                <div className="banner-grid">
+                  ${promoBanners.map(
+                    (banner) => html`
+                      <article
+                        className="promo-banner"
+                        key=${banner.title}
+                        style=${{ "--banner-tint": banner.tint }}
+                      >
+                        <div className="promo-banner__media">
+                          <img src=${banner.image} alt=${banner.title} />
+                        </div>
+                        <div className="promo-banner__content">
+                          <div className="eyebrow" style=${{ marginBottom: "12px" }}>Suplementos Colombia</div>
+                          <h3>${banner.title}</h3>
+                          <p>${banner.text}</p>
+                          <button type="button" className="secondary-button" onClick=${banner.action}>
+                            ${banner.button}
+                          </button>
+                        </div>
                       </article>
                     `,
                   )}
                 </div>
               </div>
+
             </div>
-
-            <aside className="sidebar">
-              <section className="cart-panel" aria-label="Carro">
-                <div className="section__head" style=${{ marginBottom: "10px" }}>
-                  <div>
-                    <div className="eyebrow">Carro</div>
-                    <h2 className="panel-title">Cesta</h2>
-                  </div>
-                  <button type="button" className="ghost-button" onClick=${clearCart}>
-                    Vaciar
-                  </button>
-                </div>
-
-                <div className="coupon-box">
-                  <div className="search-box">
-                    <span aria-hidden="true">%</span>
-                    <input
-                      type="text"
-                      placeholder="Ingresa el cupón"
-                      value=${couponInput}
-                      onChange=${(event) => setCouponInput(event.target.value)}
-                    />
-                  </div>
-                  <button type="button" className="secondary-button" onClick=${applyCoupon}>
-                    Aplicar cupón
-                  </button>
-                  <div className="helper">
-                    Activos: <strong>SCO10</strong>, <strong>RUTA15</strong>, <strong>MUSCLE20</strong>.
-                    <br />
-                    ${formatDiscountLabel(appliedCoupon)}
-                    <br />
-                    ${couponResult.message}
-                  </div>
-                </div>
-
-                <div className="cart-list">
-                  ${cartItems.length
-                    ? cartItems.map(
-                        (item) => html`
-                          <article className="cart-item" key=${item.key}>
-                            <img className="cart-item__image" src=${item.product.image} alt=${item.product.name} />
-                            <div className="cart-item__body">
-                              <h3 className="cart-item__name">${item.product.name}</h3>
-                              <div className="cart-item__meta">
-                                ${item.variant || "Sin variante"} · ${money(item.product.price)}
-                              </div>
-                              <div className="cart-item__meta">${money(item.product.price * item.qty)}</div>
-                            </div>
-                            <div className="cart-item__controls">
-                              <div className="qty">
-                                <button type="button" onClick=${() => updateQty(item.key, item.qty - 1)}>
-                                  -
-                                </button>
-                                <strong>${item.qty}</strong>
-                                <button type="button" onClick=${() => updateQty(item.key, item.qty + 1)}>
-                                  +
-                                </button>
-                              </div>
-                              <button type="button" className="ghost-button" onClick=${() => removeItem(item.key)}>
-                                Quitar
-                              </button>
-                            </div>
-                          </article>
-                        `,
-                      )
-                    : html`
-                        <div className="helper">
-                          Tu carrito está vacío. Agrega productos para revisar subtotal y checkout.
-                        </div>
-                      `}
-                </div>
-
-                <div className="summary-grid">
-                  <div className="summary-line">
-                    <span>Subtotal</span>
-                    <span>${money(cartSubtotal)}</span>
-                  </div>
-                  <div className="summary-line summary-line--muted">
-                    <span>Descuento</span>
-                    <span>-${money(couponResult.discount)}</span>
-                  </div>
-                  <div className="summary-line summary-line--muted">
-                    <span>Envío</span>
-                    <span>${money(deliveryFee)}</span>
-                  </div>
-                  <div className="divider"></div>
-                  <div className="summary-line">
-                    <span>Total</span>
-                    <span>${money(total)}</span>
-                  </div>
-                </div>
-
-                <div className="cart-actions">
-                  <button type="button" className="primary-button" onClick=${() => scrollToId("checkout")}>
-                    Pagar
-                  </button>
-                  <button type="button" className="secondary-button" onClick=${() => setCartOpen(true)}>
-                    Ver carro completo
-                  </button>
-                  <a className="ghost-button" href=${checkoutLink} target="_blank" rel="noreferrer">
-                    Enviar por WhatsApp
-                  </a>
-                </div>
-              </section>
-
-              <section className="newsletter-panel">
-                <div className="eyebrow">Newsletter</div>
-                <h3 className="panel-title">Recibe ofertas y novedades</h3>
-                <p className="helper">
-                  Descuentos exclusivos, lanzamientos y consejos para mantener tu tienda viva.
-                </p>
-                <div className="search-box" style=${{ marginTop: "12px" }}>
-                  <span aria-hidden="true">@</span>
-                  <input type="email" placeholder="Tu correo" />
-                </div>
-                <button
-                  type="button"
-                  className="primary-button"
-                  style=${{ width: "100%", marginTop: "12px" }}
-                  onClick=${() => setToast("Suscripción guardada en interfaz de demo.")}
-                >
-                  Suscribirme
-                </button>
-              </section>
-            </aside>
           </div>
         </section>
 
-        <section className="section">
-          <div className="section__head">
-            <div>
-              <div className="eyebrow">Blog</div>
-              <h2 className="section-title">Guía rápida de compra</h2>
-            </div>
-            <div className="section__meta">
-              Un espacio para educar, mejorar SEO y conectar la tienda con contenido útil.
-            </div>
-          </div>
-
-          <div id="blog" className="blog-grid">
-            ${blogEntries.map(
-              (entry) => html`
-                <article className="blog-card" key=${entry.title}>
-                  <h3>${entry.title}</h3>
-                  <p>${entry.text}</p>
-                </article>
-              `,
-            )}
-          </div>
-        </section>
-
-        <section id="checkout" className="section">
-          <div className="section__head">
-            <div>
-              <div className="eyebrow">Checkout</div>
-              <h2 className="section-title">Completar pedido</h2>
-            </div>
-            <div className="section__meta">
-              Flujo listo para pasarela real, inventario y notificaciones. Hoy funciona como checkout guiado.
-            </div>
-          </div>
-
-          <div className="checkout-grid">
-            <form className="checkout-form" onSubmit=${submitOrder}>
-              <div className="field-grid">
-                <div className="field">
-                  <label htmlFor="name">Nombre completo</label>
-                  <input
-                    id="name"
-                    type="text"
-                    value=${checkout.name}
-                    onChange=${(event) => setCheckout((current) => ({ ...current, name: event.target.value }))}
-                  />
-                </div>
-                <div className="field">
-                  <label htmlFor="phone">Teléfono</label>
-                  <input
-                    id="phone"
-                    type="tel"
-                    value=${checkout.phone}
-                    onChange=${(event) => setCheckout((current) => ({ ...current, phone: event.target.value }))}
-                  />
-                </div>
-              </div>
-
-              <div className="field-grid">
-                <div className="field">
-                  <label htmlFor="email">Correo</label>
-                  <input
-                    id="email"
-                    type="email"
-                    value=${checkout.email}
-                    onChange=${(event) => setCheckout((current) => ({ ...current, email: event.target.value }))}
-                  />
-                </div>
-                <div className="field">
-                  <label htmlFor="city">Ciudad</label>
-                  <input
-                    id="city"
-                    type="text"
-                    value=${checkout.city}
-                    onChange=${(event) => setCheckout((current) => ({ ...current, city: event.target.value }))}
-                  />
-                </div>
-              </div>
-
-              <div className="field">
-                <label htmlFor="address">Dirección</label>
-                <input
-                  id="address"
-                  type="text"
-                  value=${checkout.address}
-                  onChange=${(event) => setCheckout((current) => ({ ...current, address: event.target.value }))}
-                />
-              </div>
-
-              <div className="field-grid">
-                <div className="field">
-                  <label htmlFor="delivery">Método de entrega</label>
-                  <select
-                    id="delivery"
-                    value=${checkout.delivery}
-                    onChange=${(event) => setCheckout((current) => ({ ...current, delivery: event.target.value }))}
-                  >
-                    <option value="Express">Express</option>
-                    <option value="Estándar">Estándar</option>
-                    <option value="Recogida">Recogida en punto</option>
-                  </select>
-                </div>
-                <div className="field">
-                  <label htmlFor="payment">Método de pago</label>
-                  <select
-                    id="payment"
-                    value=${checkout.payment}
-                    onChange=${(event) => setCheckout((current) => ({ ...current, payment: event.target.value }))}
-                  >
-                    <option>Contra entrega</option>
-                    <option>Transferencia</option>
-                    <option>Tarjeta</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="field">
-                <label htmlFor="notes">Notas del pedido</label>
-                <textarea
-                  id="notes"
-                  value=${checkout.notes}
-                  onChange=${(event) => setCheckout((current) => ({ ...current, notes: event.target.value }))}
-                  placeholder="Horarios, instrucciones o requerimientos especiales"
-                ></textarea>
-              </div>
-
-              <div className="helper">
-                Usa esta sección para conectar luego tu backend, pasarela de pagos y confirmación por email o WhatsApp.
-              </div>
-
-              <div className="hero__actions">
-                <button type="submit" className="primary-button">Confirmar pedido</button>
-                <button type="button" className="secondary-button" onClick=${() => scrollToId("catalogo")}>
-                  Seguir comprando
-                </button>
-              </div>
-            </form>
-
-            <aside className="order-card">
-              <h3 className="panel-title">Resumen</h3>
-              <div className="summary-grid">
-                <div className="summary-line">
-                  <span>Pedidos en carrito</span>
-                  <span>${cartCount}</span>
-                </div>
-                <div className="summary-line">
-                  <span>Subtotal</span>
-                  <span>${money(cartSubtotal)}</span>
-                </div>
-                <div className="summary-line">
-                  <span>Descuento</span>
-                  <span>-${money(couponResult.discount)}</span>
-                </div>
-                <div className="summary-line">
-                  <span>Envío</span>
-                  <span>${money(deliveryFee)}</span>
-                </div>
-                <div className="divider"></div>
-                <div className="summary-line">
-                  <span>Total</span>
-                  <span>${money(total)}</span>
-                </div>
-              </div>
-
-              <div className="helper">
-                ${cartItems.length
-                  ? `${cartItems.length} producto(s) listos para finalizar.`
-                  : "Aún no has agregado productos al carrito."}
-              </div>
-
-              ${order
-                ? html`
-                    <div className="success">
-                      <strong>Pedido creado: ${order.id}</strong>
-                      <div style=${{ marginTop: "8px" }}>
-                        Recibido el ${order.createdAt}. Puedes enviar este pedido por WhatsApp o conectar tu backend.
-                      </div>
-                    </div>
-                  `
-                : null}
-            </aside>
-          </div>
-        </section>
-
-        <section className="section">
-          <div className="section__head">
-            <div>
-              <div className="eyebrow">Preguntas</div>
-              <h2 className="section-title">Soporte y dudas frecuentes</h2>
-            </div>
-            <div className="section__meta">Bloque útil para soporte, confianza y ventas asistidas.</div>
-          </div>
-
-          <div className="blog-grid">
-            ${faqs.map(
-              (item) => html`
-                <article className="faq-card" key=${item.question}>
-                  <h3>${item.question}</h3>
-                  <p>${item.answer}</p>
-                </article>
-              `,
-            )}
-          </div>
-        </section>
       </main>
 
       <footer className="footer">
+        <div className="footer-newsletter-strip">
+          <div className="footer-newsletter-strip__copy">
+            <div className="newsletter-title">Recibe ofertas y novedades en tu correo</div>
+            <p className="subtitle">Promociones, nuevos lanzamientos y combos destacados para convertir más.</p>
+          </div>
+          <form className="footer-newsletter-strip__form" onSubmit=${(event) => event.preventDefault()}>
+            <input className="subscribe-email" type="email" placeholder="Tu correo electrónico" />
+            <button type="submit" className="subscribe-button">Suscribirme</button>
+          </form>
+        </div>
+
+        <div className="footer-trust-strip">
+          ${featureCards.map(
+            (item) => html`
+              <div className="trust-item" key=${item.title}>
+                <div className="trust-item__dot"></div>
+                <div className="trust-item-text">
+                  <strong>${item.title}</strong>
+                  <span>${item.text}</span>
+                </div>
+              </div>
+            `,
+          )}
+        </div>
+
         <div className="footer__grid">
           <div className="footer__brand">
             <div className="brand" style=${{ minWidth: "0" }}>
-              <div className="brand__mark">${siteName.slice(0, 2)}</div>
+              <div className="brand__mark">${siteName
+                .split(" ")
+                .map((part) => part[0])
+                .join("")
+                .slice(0, 2)
+                .toUpperCase()}</div>
               <div className="brand__copy">
                 <div className="brand__name">${siteName}</div>
                 <div className="brand__tag">Compra online de suplementos deportivos</div>
               </div>
             </div>
             <p>
-              Catálogo funcional inspirado en tiendas de suplementos reales, con estructura editable para
+              Tu tienda de confianza en suplementos deportivos, con catálogo editable y una base lista para
               crecer a backend, pagos y logística.
             </p>
             <p>
@@ -1119,7 +885,6 @@ function App() {
               <a href="#inicio">Inicio</a>
               <a href="#catalogo">Productos</a>
               <a href="#marcas">Marcas</a>
-              <a href="#blog">Blog</a>
             </div>
           </div>
         </div>
@@ -1136,6 +901,174 @@ function App() {
       <strong>${supportPhone}</strong>
     </a>
 
+    ${checkoutOpen
+      ? html`
+          <div className="checkout-sheet">
+            <div className="backdrop" onClick=${() => setCheckoutOpen(false)}></div>
+            <section className="checkout-modal">
+              <div className="drawer__head">
+                <div>
+                  <div className="eyebrow">Checkout</div>
+                  <h3 className="panel-title" style=${{ marginBottom: 0 }}>Completar pedido</h3>
+                </div>
+                <button type="button" className="icon-button" onClick=${() => setCheckoutOpen(false)}>
+                  ×
+                </button>
+              </div>
+              <div className="drawer__body">
+                <div className="checkout-grid">
+                  <form className="checkout-form" onSubmit=${submitOrder}>
+                    <div className="field-grid">
+                      <div className="field">
+                        <label htmlFor="name">Nombre completo</label>
+                        <input
+                          id="name"
+                          type="text"
+                          value=${checkout.name}
+                          onChange=${(event) => setCheckout((current) => ({ ...current, name: event.target.value }))}
+                        />
+                      </div>
+                      <div className="field">
+                        <label htmlFor="phone">Teléfono</label>
+                        <input
+                          id="phone"
+                          type="tel"
+                          value=${checkout.phone}
+                          onChange=${(event) => setCheckout((current) => ({ ...current, phone: event.target.value }))}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="field-grid">
+                      <div className="field">
+                        <label htmlFor="email">Correo</label>
+                        <input
+                          id="email"
+                          type="email"
+                          value=${checkout.email}
+                          onChange=${(event) => setCheckout((current) => ({ ...current, email: event.target.value }))}
+                        />
+                      </div>
+                      <div className="field">
+                        <label htmlFor="city">Ciudad</label>
+                        <input
+                          id="city"
+                          type="text"
+                          value=${checkout.city}
+                          onChange=${(event) => setCheckout((current) => ({ ...current, city: event.target.value }))}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="field">
+                      <label htmlFor="address">Dirección</label>
+                      <input
+                        id="address"
+                        type="text"
+                        value=${checkout.address}
+                        onChange=${(event) => setCheckout((current) => ({ ...current, address: event.target.value }))}
+                      />
+                    </div>
+
+                    <div className="field-grid">
+                      <div className="field">
+                        <label htmlFor="delivery">Método de entrega</label>
+                        <select
+                          id="delivery"
+                          value=${checkout.delivery}
+                          onChange=${(event) => setCheckout((current) => ({ ...current, delivery: event.target.value }))}
+                        >
+                          <option value="Express">Express</option>
+                          <option value="Estándar">Estándar</option>
+                          <option value="Recogida">Recogida en punto</option>
+                        </select>
+                      </div>
+                      <div className="field">
+                        <label htmlFor="payment">Método de pago</label>
+                        <select
+                          id="payment"
+                          value=${checkout.payment}
+                          onChange=${(event) => setCheckout((current) => ({ ...current, payment: event.target.value }))}
+                        >
+                          <option>Contra entrega</option>
+                          <option>Transferencia</option>
+                          <option>Tarjeta</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="field">
+                      <label htmlFor="notes">Notas del pedido</label>
+                      <textarea
+                        id="notes"
+                        value=${checkout.notes}
+                        onChange=${(event) => setCheckout((current) => ({ ...current, notes: event.target.value }))}
+                        placeholder="Horarios, instrucciones o requerimientos especiales"
+                      ></textarea>
+                    </div>
+
+                    <div className="helper">
+                      Usa esta sección para conectar luego tu backend, pasarela de pagos y confirmación por email o WhatsApp.
+                    </div>
+
+                    <div className="hero__actions">
+                      <button type="submit" className="primary-button">Confirmar pedido</button>
+                      <button type="button" className="secondary-button" onClick=${() => setCheckoutOpen(false)}>
+                        Seguir comprando
+                      </button>
+                    </div>
+                  </form>
+
+                  <aside className="order-card">
+                    <h3 className="panel-title">Resumen</h3>
+                    <div className="summary-grid">
+                      <div className="summary-line">
+                        <span>Pedidos en carrito</span>
+                        <span>${cartCount}</span>
+                      </div>
+                      <div className="summary-line">
+                        <span>Subtotal</span>
+                        <span>${money(cartSubtotal)}</span>
+                      </div>
+                      <div className="summary-line">
+                        <span>Descuento</span>
+                        <span>-${money(couponResult.discount)}</span>
+                      </div>
+                      <div className="summary-line">
+                        <span>Envío</span>
+                        <span>${money(deliveryFee)}</span>
+                      </div>
+                      <div className="divider"></div>
+                      <div className="summary-line">
+                        <span>Total</span>
+                        <span>${money(total)}</span>
+                      </div>
+                    </div>
+
+                    <div className="helper">
+                      ${cartItems.length
+                        ? `${cartItems.length} producto(s) listos para finalizar.`
+                        : "Aún no has agregado productos al carrito."}
+                    </div>
+
+                    ${order
+                      ? html`
+                          <div className="success">
+                            <strong>Pedido creado: ${order.id}</strong>
+                            <div style=${{ marginTop: "8px" }}>
+                              Recibido el ${order.createdAt}. Puedes enviar este pedido por WhatsApp o conectar tu backend.
+                            </div>
+                          </div>
+                        `
+                      : null}
+                  </aside>
+                </div>
+              </div>
+            </section>
+          </div>
+        `
+      : null}
+
     ${cartOpen
       ? html`
           <div className="backdrop" onClick=${() => setCartOpen(false)}></div>
@@ -1151,6 +1084,28 @@ function App() {
             </div>
             <div className="drawer__body">
               <section className="cart-panel">
+                <div className="coupon-box">
+                  <div className="search-box">
+                    <span aria-hidden="true">%</span>
+                    <input
+                      type="text"
+                      placeholder="Ingresa el cupón"
+                      value=${couponInput}
+                      onChange=${(event) => setCouponInput(event.target.value)}
+                    />
+                  </div>
+                  <button type="button" className="secondary-button" onClick=${applyCoupon}>
+                    Aplicar cupón
+                  </button>
+                  <div className="helper">
+                    Activos: <strong>SCO10</strong>, <strong>RUTA15</strong>, <strong>MUSCLE20</strong>.
+                    <br />
+                    ${formatDiscountLabel(appliedCoupon)}
+                    <br />
+                    ${couponResult.message}
+                  </div>
+                </div>
+
                 <div className="cart-list">
                   ${cartItems.length
                     ? cartItems.map(
@@ -1203,7 +1158,7 @@ function App() {
                 <div className="cart-actions">
                   <button type="button" className="primary-button" onClick=${() => {
                     setCartOpen(false);
-                    scrollToId("checkout");
+                    setCheckoutOpen(true);
                   }}>
                     Ir al checkout
                   </button>
@@ -1318,7 +1273,6 @@ function App() {
                         setCategory("Oferta Semanal");
                         scrollToId("catalogo");
                       }
-                      if (item === "Blog") scrollToId("blog");
                     }}
                   >
                     ${item}
